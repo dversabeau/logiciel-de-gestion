@@ -1,25 +1,12 @@
 const Operation = require("../models/operations.model");
+const asynchandler = require("express-async-handler");
 
 class OperationsController {
-  async getAll(req, res) {
-    try {
-      const Operations = new Operation({});
-      Operations.getAll()
-        .then((data) => {
-          return res.send({
-            method: req.method,
-            status: "success",
-            flash: "Création de l'opération avec succès !",
-            Aricles: data,
-          });
-        })
-        .catch((err) => {
-          throw err;
-        });
-    } catch (error) {
-      throw error;
-    }
-  }
+
+  getAll = asynchandler(async (req, res) => {
+    const data = await Operation.getAll();
+    return res.status(200).json(data);
+  });
 }
 
-module.exports = OperationsController
+module.exports = OperationsController;

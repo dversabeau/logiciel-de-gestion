@@ -1,9 +1,8 @@
 const app = require('express')
+const { getUser } = require('../controllers/users.controller')
 const Router = app.Router()
 
-Router.route('/', (req,res) => {
-  res.status(200).json({message: "Hello"})
-})
+Router.route('/').get(getUser)
 
 
 module.exports = Router

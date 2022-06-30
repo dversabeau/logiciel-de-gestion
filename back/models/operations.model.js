@@ -1,22 +1,21 @@
-const connection = require("../config/ConnectionDB");
+const query = require("../config/ConnectionDB");
 
 class Operation {
   constructor(operation) {
-    (this.id = operation.id), (this.name = operation.name);
+    (this.id = operation.id),
+      (this.date_operation = operation.date_operation),
+      (this.nature_operation = operation.nature_operation),
+      (this.debit = operation.debit),
+      (this.credit = operation.credit);
   }
 
-  getAll() {
-    return new Promise((resolve, reject) => {
-      connection.getConnection((error, connection) => {
-        if (error) throw error;
-          connection.query(`SELECT * FROM operations`, (error, data) => {
-            if (error) reject(error);
-            console.log("model data", data);
-            resolve(data);
-            connection.release();
-          });
-      });
-    });
+  // Get all operations
+  static async getAll() {
+    const result = await query(`SELECT * from OPERATIONS`);
+    if (result === undefined || null) {
+      throw new AppError("any User was not found", 404);
+    }
+    return result;
   }
 }
 

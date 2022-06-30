@@ -1,11 +1,9 @@
 const mysql = require("mysql");
 const dbOptions = require("./dbOption")
+const {promisify} = require('util')
 
-const connectionPool = mysql.createPool({...dbOptions})
 
-const getConnection = (done) => {
-  console.log("connection pool");
-  connectionPool.getConnection(done);
-};
+const pool = mysql.createConnection({...dbOptions})
+const query = promisify(pool.query).bind(pool)
 
-module.exports = { getConnection: getConnection };
+module.exports = query
