@@ -1,5 +1,7 @@
 const query = require("../config/ConnectionDB");
 const AppError = require("../helpers/appError");
+const bcrypt = require('bcryptjs');
+const { checkChar } = require("../helpers/regex");
 module.exports = class User {
 
   // config contructor
@@ -23,5 +25,18 @@ module.exports = class User {
     }
 
     // Create an user
+    static async createUser(email, password) {
+
+      const checkUser = await query(`select email from USERS where email = ${email}`)
+
+      if(checkUser) {
+        throw new AppError('cet email dèja existe', 400)
+      }
+      const result = await query(`inset into USERS SET email = "${email}", password = "${password}"`)
+
+      const getUser = await this.getActor('id', result.insertId)
+
+      return new User(getUser)
+    }
   
   }
