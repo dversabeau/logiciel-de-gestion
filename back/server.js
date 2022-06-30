@@ -12,6 +12,7 @@ app.use(express.urlencoded({extended:false}))
 
 // config router user
 app.use('/api/user', require('./routers/users.router'))
+app.use('/api/operation', require('./routers/operations.router'))
 
 // listen
 app.listen(PORT, () => {
