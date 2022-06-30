@@ -6,7 +6,6 @@ const AppError = require('../helpers/appError');
 const { generateToken } = require('../helpers/generateToken');
 
 
-
 //controller get an user
 module.exports.getUserController = asynchandler(async (req, res) => {
   const data = await User.getUser()
@@ -15,10 +14,14 @@ module.exports.getUserController = asynchandler(async (req, res) => {
 
 
 // Controller create an user 
-module.exports.ceateUserController = asynchandler(async (req, res) => {
-  const { email, password, confirmPassword } = req.body
+module.exports.createUserController = asynchandler(async (req, res) => {
+  const { email, password, confirmPassword, username } = req.body
 
-  if (!email || !password || !confirmPassword) {
+  if (username.search("'") !== -1 || username.search('"') !== -1){
+    throw new AppError('username is not valide', 400)
+  }
+
+  if (!email || !password || !confirmPassword || !username) {
     throw new AppError('Email, Password ou Confirm Password sont obligatoires', 404)
   }
 
@@ -31,16 +34,18 @@ module.exports.ceateUserController = asynchandler(async (req, res) => {
   }
 
   // hash Password
-  const salt = await bcrypt.genSalt(10)
+  const salt = await bcrypt.genSalt(7)
   const hashpass = await bcrypt.hash(password, salt)
 
   // REQ SQL pour créer un utilisateur
-  await User.createUser(email, hashpass)
-  const newUser = User.getUser("email", email)
+  await User.createUser(email, hashpass, username)
+  const newUser = await User.getUser("email", email)
+  console.log(newUser);
   if (newUser) {
     res.status(200).json({
       id: newUser.id,
       email: newUser.email,
+      username: newUser.username,
       token: generateToken(newUser.id),
       role: newUser.role
     })

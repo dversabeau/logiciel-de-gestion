@@ -22,7 +22,7 @@ app.all("*", (req, res) => {
   throw new AppError(`Requested URL ${req.path} not found!`, 404)
 })
 
-app.use(AppError)
+app.use(errorHandler)
 
 // listen
 app.listen(PORT, () => {
