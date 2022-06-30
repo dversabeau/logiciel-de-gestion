@@ -13,9 +13,35 @@ class Operation {
   static async getAll() {
     const result = await query(`SELECT * from OPERATIONS`);
     if (result === undefined || null) {
-      throw new AppError("any User was not found", 404);
+      throw new AppError("Operations was not found", 404);
     }
     return result;
+  }
+
+  // Post an opération
+  static async create(operation) {
+    const result = await query(
+      `INSERT INTO OPERATIONS (
+        date_operation,
+        nature_operation,
+        debit,
+        credit
+        ) 
+        VALUES (
+          "${operation.date_operation}",
+          "${operation.nature_operation}",
+          ${operation.debit},
+          ${operation.credit}
+        )`
+    );
+    if (result === undefined || null) {
+      throw new AppError("Operation was not found", 404);
+    }
+    return result;
+  }
+
+  // Update an opération
+  static async update(id, operation) {
   }
 }
 
