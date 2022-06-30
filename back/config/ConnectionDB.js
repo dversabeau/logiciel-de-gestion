@@ -3,7 +3,7 @@ const dbOptions = require("./dbOption")
 
 const connectionPool = mysql.createPool({...dbOptions})
 
-var getConnection = function (done) {
+const getConnection = (done) => {
   console.log("connection pool");
   connectionPool.getConnection(done);
 };
