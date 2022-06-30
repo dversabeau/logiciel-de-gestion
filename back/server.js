@@ -13,7 +13,6 @@ app.use(express.urlencoded({extended:false}))
 // config router user
 app.use('/api/user', require('./routers/users.router'))
 
-
 // listen
 app.listen(PORT, () => {
   console.log("le serveur tourne sur le port: " + PORT);
