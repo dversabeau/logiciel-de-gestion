@@ -14,7 +14,7 @@ app.use(express.urlencoded({extended:false}))
 
 // config router user
 app.use('/api/user', require('./routers/users.router'))
-app.use('/api/category', require('./routers/users.router'))
+app.use('/api/category', require('./routers/categories.router'))
 app.use('/api/operation', require('./routers/operations.router'))
 
 // Error handler

@@ -1,4 +1,5 @@
 const query = require("../config/ConnectionDB");
+const AppError = require("../helpers/appError");
 
 class Operation {
   constructor(operation) {

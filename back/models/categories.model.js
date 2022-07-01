@@ -1,9 +1,9 @@
 const query = require("../config/ConnectionDB");
+const AppError = require("../helpers/appError");
 
 class Category {
   constructor(category) {
-    (this.id = operation.id),
-      (this.name_category = category.name_category);
+    (this.id = category.id), (this.name_category = category.name_category);
   }
 
   static async getAll() {
@@ -38,7 +38,7 @@ class Category {
     const result = await query(
       `UPDATE CATEGORIES
       SET name_category = "${category.name_category}"
-      WHERE id_categories = ${id}`
+      WHERE id_category = ${id}`
     );
     if (result === undefined || null) {
       throw new AppError("Category was not found and cannot be updated", 404);
