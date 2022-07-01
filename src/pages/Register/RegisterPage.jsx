@@ -4,16 +4,16 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import RegisterForm from '../../components/RegisterForm/RegisterForm'
 
 export default function RegisterPage() {
-  const {username} = useSelector((state)=> state.user.user)
+  const {user} = useSelector((state)=> state.user)
   const navigate = useNavigate()
   const { pathname } = useLocation()
   useEffect(() => {
     window.scrollTo(0, 0)
 
-    if (username) {
+    if (user) {
       navigate('/admin')
     }
-  }, [pathname, username, navigate])
+  }, [pathname, user, navigate])
   return (
     <div>
       <h1>Register Page</h1>
