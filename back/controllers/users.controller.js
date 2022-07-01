@@ -1,5 +1,6 @@
 const User = require('../models/users.model');
 const bcrypt = require('bcryptjs')
+var validator = require('validator');
 const asynchandler = require('express-async-handler');
 const { checkChar, ValidateEmail } = require('../helpers/regex');
 const AppError = require('../helpers/appError');
@@ -20,17 +21,21 @@ module.exports.getUserController = asynchandler(async (req, res) => {
 module.exports.createUserController = asynchandler(async (req, res) => {
   const { email, password, confirmPassword, username } = req.body
 
-  if (username.search("'") !== -1 || username.search('"') !== -1){
+  if (!validator.matches(username, "^[a-zA-Z0-9_\.\-]*$")){
     throw new AppError('username is not valide', 400)
+  }
+
+  if (!validator.isEmail(email) && username.search("+") !== -1) {
+    throw new AppError('email is not valide', 400)
   }
 
   if (!email || !password || !confirmPassword || !username) {
     throw new AppError('Email, Password ou Confirm Password ou username sont obligatoires', 404)
   }
 
-  if (ValidateEmail.test(email) !== true) {
-    throw new Error('Email is not valide.', 400)
-  }
+  // if (ValidateEmail.test(email) !== true) {
+  //   throw new Error('Email is not valide.', 400)
+  // }
 
   if (password !== confirmPassword) {
     throw new AppError('password !== confirm password')
