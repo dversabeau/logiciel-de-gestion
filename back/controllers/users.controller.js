@@ -25,7 +25,7 @@ module.exports.createUserController = asynchandler(async (req, res) => {
     throw new AppError('username is not valide', 400)
   }
 
-  if (!validator.isEmail(email)){
+  if (!validator.isEmail(email) && username.search("+") !== -1) {
     throw new AppError('email is not valide', 400)
   }
 

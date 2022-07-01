@@ -1,13 +1,30 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import RegisterForm from './components/RegisterForm/Register';
+import AppLayout from './layouts/AppLayout';
+import HomePage from './pages/Home/HomePage';
+import LoginPage from './pages/Login/LoginPage';
+import RegisterPage from './pages/Register/RegisterPage';
+
+function MainRoutes () {
+  return(
+    <AppLayout>
+    <Routes>
+      <Route path='register' element={<RegisterPage/>} />
+      <Route path='login' element={<LoginPage/>} />
+    </Routes>
+  </AppLayout>
+)
+}
+
 
 function App() {
   return (
-    <div className="App">
-      <h1>
-        <RegisterForm/>
-      </h1>
-    </div>
+    <BrowserRouter>
+    <Routes>
+      <Route path='/*' element={<MainRoutes/>}/>
+      <Route exact path='/' element ={<HomePage/>}/>
+    </Routes>
+    </BrowserRouter>
   );
 }
 
