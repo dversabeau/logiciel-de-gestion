@@ -6,15 +6,26 @@ module.exports.getAll = asynchandler(async (req, res) => {
   return res.status(200).json(data);
 });
 
-module.exports.create = asynchandler(async (req, res) => {
-  console.log(req.body)
-  const data = await Operation.create(req.body);
+module.exports.getOne = asynchandler(async (req, res) => {
+  const id = req.params.id;
+  const data = await Operation.getOne(id);
   return res.status(200).json(data);
 });
 
-module.exports.update = asynchandler(async (req, res) => {
-  const id = req.params.id
-  const newOperation = req.body.operation
-  const data = await Operation.update(id, newOperation);
+module.exports.createOne = asynchandler(async (req, res) => {
+  const data = await Operation.createOne(req.body);
+  return res.status(200).json(data);
+});
+
+module.exports.updateOne = asynchandler(async (req, res) => {
+  const id = req.params.id;
+  const newOperation = req.body;
+  const data = await Operation.updateOne(id, newOperation);
+  return res.status(200).json(data);
+});
+
+module.exports.deleteOne = asynchandler(async (req, res) => {
+  const id = req.params.id;
+  const data = await Operation.deleteOne(id);
   return res.status(200).json(data);
 });
