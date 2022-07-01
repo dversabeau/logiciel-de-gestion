@@ -4,7 +4,6 @@ const asynchandler = require('express-async-handler');
 const { checkChar, ValidateEmail } = require('../helpers/regex');
 const AppError = require('../helpers/appError');
 const { generateToken } = require('../helpers/generateToken');
-const Operation = require('../models/operations.model');
 
 
 // @desc   Get user
@@ -26,7 +25,7 @@ module.exports.createUserController = asynchandler(async (req, res) => {
   }
 
   if (!email || !password || !confirmPassword || !username) {
-    throw new AppError('Email, Password ou Confirm Password sont obligatoires', 404)
+    throw new AppError('Email, Password ou Confirm Password ou username sont obligatoires', 404)
   }
 
   if (ValidateEmail.test(email) !== true) {

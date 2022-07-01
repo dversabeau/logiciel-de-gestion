@@ -41,10 +41,14 @@ module.exports = class User {
 
   // Create an user
   static async createUser(email, password, username) {
-    const checkUser = await query(`select USERS.email from USERS where email = "${email}"`)
+    const checkUser = await query(`select USERS.email, USERS.username from USERS where email = "${email}" or username = "${username}"`)
 
-    if (checkUser[0]) {
-      throw new AppError("cet email dèja existe", 400)
+    if (checkUser[0].username) {
+      throw new AppError("ce username existe dèja ", 400)
+    }
+
+    if (checkUser[0].email) {
+      throw new AppError("cet email existe dèja ", 400)
     }
 
     await query(`INSERT into USERS SET email = "${email}", password = "${password}", username= "${username}"`)
