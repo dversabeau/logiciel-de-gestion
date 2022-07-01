@@ -1,11 +1,12 @@
 const app = require("express");
 const Router = app.Router();
 const CategoriesController = require("../controllers/categories.controller");
+const { isLogged } = require("../middlewares/auth");
 
 Router.get("/", CategoriesController.getAll)
-  .post("/", CategoriesController.createOne)
+  .post("/",isLogged, CategoriesController.createOne)
   .get("/:id", CategoriesController.getOne)
-  .put("/:id", CategoriesController.updateOne)
-  .delete("/:id", CategoriesController.deleteOne);
+  .put("/:id",isLogged, CategoriesController.updateOne)
+  .delete("/:id",isLogged, CategoriesController.deleteOne);
 
 module.exports = Router;

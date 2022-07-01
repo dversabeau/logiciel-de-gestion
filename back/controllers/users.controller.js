@@ -10,12 +10,12 @@ const { generateToken } = require('../helpers/generateToken');
 // @route  GET /api/users/
 // @access private
 module.exports.getUserController = asynchandler(async (req, res) => {
-  const data = await User.getUser()
+  const data = await User.getUser("email", "mamad@m.com")
   return res.status(200).json(data)
 })
 
 // @desc   Get user
-// @route  GET /api/users/register
+// @route  POST /api/users/register
 // @access public
 module.exports.createUserController = asynchandler(async (req, res) => {
   const { email, password, confirmPassword, username } = req.body
@@ -25,7 +25,7 @@ module.exports.createUserController = asynchandler(async (req, res) => {
   }
 
   if (!email || !password || !confirmPassword || !username) {
-    throw new AppError('Email, Password ou Confirm Password sont obligatoires', 404)
+    throw new AppError('Email, Password ou Confirm Password ou username sont obligatoires', 404)
   }
 
   if (ValidateEmail.test(email) !== true) {
@@ -65,7 +65,7 @@ module.exports.getAllUsersController = asynchandler(async(req, res) => {
 })
 
 // @desc   login user
-// @route  GET /api/users/login
+// @route  POST /api/users/login
 // @access public
 module.exports.loginUserController = asynchandler(async(req, res) => {
   const {usermail, password} = req.body
@@ -86,4 +86,17 @@ module.exports.loginUserController = asynchandler(async(req, res) => {
   } else {
     throw new AppError('Invalid Error', 400)
   }
+})
+
+// @desc   edit user
+// @route  PUT /api/users/login
+// @access public
+module.exports.editUser = asynchandler(async(req, res) => {
+
+})
+
+module.exports.deleteUserController = asynchandler(async(req, res) => {
+  const {id} = req.params
+  await User.deleteUser(id)
+  res.status(200).json({id : id})
 })

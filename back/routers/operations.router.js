@@ -1,14 +1,15 @@
 const app = require("express");
 const Router = app.Router();
 const OperationsController = require("../controllers/operations.controller");
+const { isLogged } = require("../middlewares/auth");
 
 Router.get("/", OperationsController.getAll)
-  .post("/", OperationsController.createOne)
+  .post("/",isLogged, OperationsController.createOne)
   .get("/:id", OperationsController.getOne)
   .get("/by_user/:id", OperationsController.getAllByUser)
   .get("/by_category/:id", OperationsController.getAllByCategory)
-  .put("/:id", OperationsController.updateOne)
-  .delete("/:id", OperationsController.deleteOne)
+  .put("/:id",isLogged, OperationsController.updateOne)
+  .delete("/:id",isLogged, OperationsController.deleteOne)
   
 
 module.exports = Router;

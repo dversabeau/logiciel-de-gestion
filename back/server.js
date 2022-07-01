@@ -9,8 +9,14 @@ const PORT = process.env.API_PORT
 
 // body parser
 app.use(express.json())
-app.use(express.urlencoded({extended:false}))
+// app.use(express.urlencoded({extended:false}))
 
+// app.use(cors({
+//   "origin": "*",
+//   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+//   "preflightContinue": true,
+//   "optionsSuccessStatus": 204,
+// }))
 
 // config router user
 app.use('/api/user', require('./routers/users.router'))
