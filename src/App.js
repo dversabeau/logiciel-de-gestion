@@ -20,16 +20,15 @@ function MainRoutes () {
 }
 
 function AdminRoutes() {
-  const {username} = useSelector((state)=> state.user.user)
+  const {user} = useSelector((state)=> state.user)
   const navigate = useNavigate()
   const { pathname } = useLocation()
   useEffect(() => {
     window.scrollTo(0, 0)
-
-    if (!username) {
-      navigate('/connexion')
+    if (user === null) {
+      navigate('/login')
     }
-  }, [pathname, username, navigate])
+  }, [pathname, user, navigate])
 
   return (
     <AppLayout>

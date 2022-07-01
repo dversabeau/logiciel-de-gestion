@@ -4,16 +4,16 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import LoginForm from '../../components/LoginForm/LoginForm'
 
 export default function LoginPage() {
-  const {username} = useSelector((state)=> state.user.user)
+  const {user} = useSelector((state)=> state.user)
   const navigate = useNavigate()
   const { pathname } = useLocation()
   useEffect(() => {
     window.scrollTo(0, 0)
 
-    if (username) {
+    if (user) {
       navigate('/admin')
     }
-  }, [pathname, username, navigate])
+  }, [pathname, user, navigate])
   
   return (
     <div>
