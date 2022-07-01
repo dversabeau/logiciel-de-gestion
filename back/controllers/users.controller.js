@@ -6,14 +6,17 @@ const AppError = require('../helpers/appError');
 const { generateToken } = require('../helpers/generateToken');
 
 
-//controller get an user
+// @desc   Get user
+// @route  GET /api/users/
+// @access private
 module.exports.getUserController = asynchandler(async (req, res) => {
   const data = await User.getUser()
   return res.status(200).json(data)
 })
 
-
-// Controller create an user 
+// @desc   Get user
+// @route  GET /api/users/register
+// @access public
 module.exports.createUserController = asynchandler(async (req, res) => {
   const { email, password, confirmPassword, username } = req.body
 
@@ -40,7 +43,6 @@ module.exports.createUserController = asynchandler(async (req, res) => {
   // REQ SQL pour créer un utilisateur
   await User.createUser(email, hashpass, username)
   const newUser = await User.getUser("email", email)
-  console.log(newUser);
   if (newUser) {
     res.status(200).json({
       id: newUser.id,
@@ -52,6 +54,36 @@ module.exports.createUserController = asynchandler(async (req, res) => {
   } else {
     throw new AppError('Invalid Error', 400)
   }
+})
 
+// @desc   Get all users
+// @route  GET /api/users/all
+// @access private
+module.exports.getAllUsersController = asynchandler(async(req, res) => {
+  const data = await User.getAllUsers()
+  return res.status(200).json(data)
+})
 
+// @desc   login user
+// @route  GET /api/users/login
+// @access public
+module.exports.loginUserController = asynchandler(async(req, res) => {
+  const {usermail, password} = req.body
+  
+  if(!usermail || !password) {
+    throw new AppError('username ou email ou password sont obligatoires', 404)
+  }
+
+  const loginUser = await User.loginUser(usermail, password)
+  if (loginUser) {
+    res.status(200).json({
+      id: loginUser.id,
+      email: loginUser.email,
+      username: loginUser.username,
+      token: generateToken(loginUser.id),
+      role: loginUser.role
+    })
+  } else {
+    throw new AppError('Invalid Error', 400)
+  }
 })
