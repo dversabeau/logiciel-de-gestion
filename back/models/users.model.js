@@ -16,7 +16,12 @@ module.exports = class User {
 
   // Get an user
   static async getUser(key, value) {
-    const result = await query(`SELECT USERS.id_user, USERS.role, USERS.username, USERS.email from USERS where ${key} = "${value}"`)
+    let result;
+    if (key === "email" || key === "username") {
+      result = await query(`SELECT USERS.id_user, USERS.role, USERS.username, USERS.email from USERS where ${key} = "${value}"`)
+    } else {
+      result = await query(`SELECT USERS.id_user, USERS.role, USERS.username, USERS.email from USERS where ${key} = ${value}`)
+    }
     const user = result[0]
     if (user === undefined) {
       throw new AppError('User was not found', 404)
@@ -55,7 +60,7 @@ module.exports = class User {
 
     // check username ou email
     if (!checkUser[0]) {
-      throw new AppError('cet email ou username ne pas existe', 404)
+      throw new AppError('cet email ou username n"existe pas', 404)
     }
 
     // Check Password
@@ -66,6 +71,20 @@ module.exports = class User {
     // Get user by email
     const getUser = await this.getUser('email', checkUser[0].email)
     return new User(getUser)
+
+  }
+
+  // Delete model
+  static async deleteUser(id) {
+    const checkUser = await query(`select email from USERS where id_user = ${id}`)
+
+    // check username ou email
+    if (!checkUser[0]) {
+      throw new AppError('cet user  n"existe pas', 404)
+    }
+
+    return await query(`DELETE FROM USERS WHERE id_user = ${id}`)
+
 
   }
 
