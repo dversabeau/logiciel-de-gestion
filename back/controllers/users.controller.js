@@ -6,19 +6,25 @@ const AppError = require('../helpers/appError');
 const { generateToken } = require('../helpers/generateToken');
 
 
-
-//controller get an user
+// @desc   Get user
+// @route  GET /api/users/
+// @access private
 module.exports.getUserController = asynchandler(async (req, res) => {
   const data = await User.getUser()
   return res.status(200).json(data)
 })
 
+// @desc   Get user
+// @route  GET /api/users/register
+// @access public
+module.exports.createUserController = asynchandler(async (req, res) => {
+  const { email, password, confirmPassword, username } = req.body
 
-// Controller create an user 
-module.exports.ceateUserController = asynchandler(async (req, res) => {
-  const { email, password, confirmPassword } = req.body
+  if (username.search("'") !== -1 || username.search('"') !== -1){
+    throw new AppError('username is not valide', 400)
+  }
 
-  if (!email || !password || !confirmPassword) {
+  if (!email || !password || !confirmPassword || !username) {
     throw new AppError('Email, Password ou Confirm Password sont obligatoires', 404)
   }
 
@@ -31,22 +37,53 @@ module.exports.ceateUserController = asynchandler(async (req, res) => {
   }
 
   // hash Password
-  const salt = await bcrypt.genSalt(10)
+  const salt = await bcrypt.genSalt(7)
   const hashpass = await bcrypt.hash(password, salt)
 
   // REQ SQL pour créer un utilisateur
-  await User.createUser(email, hashpass)
-  const newUser = User.getUser("email", email)
+  await User.createUser(email, hashpass, username)
+  const newUser = await User.getUser("email", email)
   if (newUser) {
     res.status(200).json({
       id: newUser.id,
       email: newUser.email,
+      username: newUser.username,
       token: generateToken(newUser.id),
       role: newUser.role
     })
   } else {
     throw new AppError('Invalid Error', 400)
   }
+})
 
+// @desc   Get all users
+// @route  GET /api/users/all
+// @access private
+module.exports.getAllUsersController = asynchandler(async(req, res) => {
+  const data = await User.getAllUsers()
+  return res.status(200).json(data)
+})
 
+// @desc   login user
+// @route  GET /api/users/login
+// @access public
+module.exports.loginUserController = asynchandler(async(req, res) => {
+  const {usermail, password} = req.body
+  
+  if(!usermail || !password) {
+    throw new AppError('username ou email ou password sont obligatoires', 404)
+  }
+
+  const loginUser = await User.loginUser(usermail, password)
+  if (loginUser) {
+    res.status(200).json({
+      id: loginUser.id,
+      email: loginUser.email,
+      username: loginUser.username,
+      token: generateToken(loginUser.id),
+      role: loginUser.role
+    })
+  } else {
+    throw new AppError('Invalid Error', 400)
+  }
 })
