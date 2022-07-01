@@ -1,6 +1,7 @@
 import cb from 'classnames';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../app/features/users/usersSlice';
 import styles from "./register.module.css"
 
@@ -15,6 +16,7 @@ export default function RegisterForm() {
 
   const { username, email, password, confirmPassword } = formData
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   function onChange(e) {
     setFormDate((prevState) => ({
@@ -27,6 +29,7 @@ export default function RegisterForm() {
     e.preventDefault()
     const registerData = {username, email, password, confirmPassword}
     dispatch(registerUser(registerData))
+    navigate('/admin')
   }
 
   return (

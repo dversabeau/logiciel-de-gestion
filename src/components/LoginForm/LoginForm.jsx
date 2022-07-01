@@ -1,8 +1,9 @@
 import cb from 'classnames';
+import styles from "./login.module.css"
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser, registerUser } from '../../app/features/users/usersSlice';
-import styles from "./login.module.css"
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
 
@@ -13,6 +14,7 @@ export default function LoginForm() {
 
   const { usermail, password} = formData
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   function onChange(e) {
     setFormDate((prevState) => ({
@@ -25,6 +27,7 @@ export default function LoginForm() {
     e.preventDefault()
     const loginData = {usermail,password}
     dispatch(loginUser(loginData))
+    navigate('/admin')
   }
 
   return (
