@@ -13,7 +13,6 @@ const initialState = {
 
 // Register an user
 export const registerUser = createAsyncThunk('user/create',
-
   async (user, thunkAPI) => {
     try {
       return await UserService.registerUser(user)
