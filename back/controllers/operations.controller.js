@@ -12,6 +12,19 @@ module.exports.getOne = asynchandler(async (req, res) => {
   return res.status(200).json(data);
 });
 
+module.exports.getAllByUser = asynchandler(async (req, res) => {
+  console.log(req.params)
+  const id = req.params.id;
+  const data = await Operation.getAllByUser(id);
+  return res.status(200).json(data);
+});
+
+module.exports.getAllByCategory = asynchandler(async (req, res) => {
+  const id = req.params.id;
+  const data = await Operation.getAllByCategory(id);
+  return res.status(200).json(data);
+});
+
 module.exports.createOne = asynchandler(async (req, res) => {
   const data = await Operation.createOne(req.body);
   return res.status(200).json(data);

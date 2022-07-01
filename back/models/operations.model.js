@@ -28,19 +28,52 @@ class Operation {
     return result;
   }
 
+  static async getAllByUser(id) {
+    const result = await query(
+      `SELECT 
+      OPERATIONS.*
+      FROM OPERATIONS
+      INNER JOIN USERS
+      ON OPERATIONS.id_user = USERS.id_user
+      WHERE USERS.id_user = ${id}`
+    );
+    if (result === undefined || null) {
+      throw new AppError("Operation was not found", 404);
+    }
+    return result;
+  }
+
+  static async getAllByCategory(id) {
+    const result = await query(
+      `SELECT OPERATIONS.* 
+      FROM OPERATIONS
+      INNER JOIN CATEGORIES
+      ON OPERATIONS.id_category = CATEGORIES.id_category
+      WHERE CATEGORIES.id_category = ${id}`
+    );
+    if (result === undefined || null) {
+      throw new AppError("Operation was not found", 404);
+    }
+    return result;
+  }
+
   static async createOne(operation) {
     const result = await query(
       `INSERT INTO OPERATIONS (
         date_operation,
         nature_operation,
         debit,
-        credit
+        credit,
+        id_user,
+        id_category
         ) 
         VALUES (
           "${operation.date_operation}",
           "${operation.nature_operation}",
           ${operation.debit},
-          ${operation.credit}
+          ${operation.credit},
+          ${operation.id_user},
+          ${operation.id_category}
         )`
     );
     if (result === undefined || null) {
