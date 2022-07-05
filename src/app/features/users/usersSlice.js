@@ -42,7 +42,6 @@ async (user, thunkAPI) => {
     return thunkAPI.rejectWithValue(message)
   }
 }
-
 )
 
 export const userSlice = createSlice({
@@ -57,6 +56,8 @@ export const userSlice = createSlice({
     },
   },
   extraReducers : (builder) =>{
+
+    // Register an User
     builder.addCase(registerUser.pending, (state)=> {
       state.isLoading = true
     })
@@ -72,17 +73,17 @@ export const userSlice = createSlice({
       state.message = action.payload
       state.user = null
     })
-
+      // Login an User
     .addCase(loginUser.pending, (state)=> {
       state.isLoading = true
     })
     .addCase(loginUser.fulfilled, (state, action) => {
+      console.log("error", action.payload);
       state.isLoading = false
       state.isSuccess = true
       state.user = action.payload
     })
     .addCase(loginUser.rejected, (state, action) =>  {
-      console.log("error", action.payload);
       state.isLoading = false
       state.isError = true
       state.message = action.payload
